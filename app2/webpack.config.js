@@ -13,7 +13,7 @@ module.exports = {
   },
 
   output: {
-    publicPath: "http://localhost:7000/"
+    publicPath: "http://localhost:7002/"
   },
 
   resolve: {
@@ -38,17 +38,12 @@ module.exports = {
 
   plugins: [
     new ModuleFederationPlugin({
-      name: "shell",
-      library: { type: "var", name: "shell" },
+      name: "app2",
+      library: { type: "var", name: "app2" },
       filename: "remoteEntry.js",
-      remotes: {
-        app1: "app1",
-        app2: "app2",
+      exposes: {
+        Root: "./src/Root",
       },
-      // exposes: {
-      //   SideNav: "./src/SideNav",
-      //   Page: "./src/Page"
-      // },
       shared: ["react", "react-dom", "react-router-dom"]
     }),
     new HtmlWebpackPlugin({

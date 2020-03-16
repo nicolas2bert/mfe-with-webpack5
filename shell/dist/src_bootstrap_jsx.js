@@ -73,7 +73,8 @@ function mapDispatchToProps(dispatch) {
 
  // import Root from 'app1/Root';
 
-const Root = (0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(() => __webpack_require__.e(/*! import() */ "-_6ca7").then(__webpack_require__.t.bind(__webpack_require__, /*! app1/Root */ "?6ca7", 7)));
+const Root1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(() => __webpack_require__.e(/*! import() */ "-_6ca7").then(__webpack_require__.t.bind(__webpack_require__, /*! app1/Root */ "?6ca7", 7)));
+const Root2 = (0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(() => __webpack_require__.e(/*! import() */ "-_b6dc").then(__webpack_require__.t.bind(__webpack_require__, /*! app2/Root */ "?b6dc", 7)));
 
 class Shell extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
   render() {
@@ -81,7 +82,9 @@ class Shell extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
       store: this.props.store
     }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Navbar__WEBPACK_IMPORTED_MODULE_2__.default, null), react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
       fallback: 'fallback'
-    }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Root, {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Root1, {
+      store: this.props.store
+    }), react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Root2, {
       store: this.props.store
     }))));
   }

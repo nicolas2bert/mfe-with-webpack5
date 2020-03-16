@@ -2,7 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { Provider } from 'react-redux'
 import Navbar from './Navbar';
 // import Root from 'app1/Root';
-const Root = lazy(() => import('app1/Root'));
+const Root1 = lazy(() => import('app1/Root'));
+const Root2 = lazy(() => import('app2/Root'));
 
 class Shell extends React.Component{
     render() {
@@ -10,7 +11,8 @@ class Shell extends React.Component{
             <div>
                 <Navbar/>
                 <Suspense fallback={'fallback'}>
-                    <Root store={this.props.store}/>
+                    <Root1 store={this.props.store}/>
+                    <Root2 store={this.props.store}/>
                 </Suspense>
             </div>
         </Provider>;

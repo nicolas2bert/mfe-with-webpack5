@@ -28,6 +28,20 @@ module.exports = app1;
 
 /***/ }),
 
+/***/ "container-reference/app2":
+/*!***********************!*\
+  !*** external "app2" ***!
+  \***********************/
+/*! unknown exports (runtime-defined) */
+/*! exports [maybe provided (runtime-defined)] [maybe used (runtime-defined)] */
+/*! runtime requirements: module */
+/***/ ((module) => {
+
+"use strict";
+module.exports = app2;
+
+/***/ }),
+
 /***/ "?ece6":
 /*!************************************************!*\
   !*** remote override container-reference/app1 ***!
@@ -39,6 +53,38 @@ module.exports = app1;
 
 "use strict";
 var external = __webpack_require__("container-reference/app1");
+external.override(Object.assign({
+	"react": () => {
+		return Promise.resolve().then(() => {
+			return () => __webpack_require__("?6365")
+		})
+	},
+	"react-dom": () => {
+		return Promise.resolve().then(() => {
+			return () => __webpack_require__("?a75e")
+		})
+	},
+	"react-router-dom": () => {
+		return __webpack_require__.e("-_533a").then(() => {
+			return () => __webpack_require__("?533a")
+		})
+	}
+}, __webpack_require__.O));
+module.exports = external;
+
+/***/ }),
+
+/***/ "?8bfd":
+/*!************************************************!*\
+  !*** remote override container-reference/app2 ***!
+  \************************************************/
+/*! unknown exports (runtime-defined) */
+/*! exports [maybe provided (runtime-defined)] [maybe used (runtime-defined)] */
+/*! runtime requirements: module, __webpack_require__, __webpack_require__.e, __webpack_require__.* */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+var external = __webpack_require__("container-reference/app2");
 external.override(Object.assign({
 	"react": () => {
 		return Promise.resolve().then(() => {
@@ -256,11 +302,18 @@ module.exports = external;
 /******/ 		var chunkMapping = {
 /******/ 			"-_6ca7": [
 /******/ 				"?6ca7"
+/******/ 			],
+/******/ 			"-_b6dc": [
+/******/ 				"?b6dc"
 /******/ 			]
 /******/ 		};
 /******/ 		var idToExternalAndNameMapping = {
 /******/ 			"?6ca7": [
 /******/ 				"?ece6",
+/******/ 				"Root"
+/******/ 			],
+/******/ 			"?b6dc": [
+/******/ 				"?8bfd",
 /******/ 				"Root"
 /******/ 			]
 /******/ 		};
@@ -298,7 +351,7 @@ module.exports = external;
 /******/ 					if(installedChunkData) {
 /******/ 						promises.push(installedChunkData[2]);
 /******/ 					} else {
-/******/ 						if(!/^\-_(533a|6ca7)$/.test(chunkId)) {
+/******/ 						if(!/^\-_(533a|6ca7|b6dc)$/.test(chunkId)) {
 /******/ 							// setup Promise in chunk cache
 /******/ 							var promise = new Promise((resolve, reject) => {
 /******/ 								installedChunkData = installedChunks[chunkId] = [resolve, reject];
