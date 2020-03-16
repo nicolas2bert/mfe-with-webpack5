@@ -23,16 +23,14 @@
 class Navbar extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
   // console.log('this.props.shellVersion!!!', this.props.shellVersion);
   render() {
-    console.log('this.props!!!', this.props);
-    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " version: ", this.props.version, " "), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " Shell Version: ", this.props.version, " "), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       onClick: e => this.props.init()
-    }, " New Info "), " "));
+    }, " Init Shell Version "), " "));
   }
 
 }
 
 function mapStateToProps(state) {
-  console.log('state!!!', state);
   return {
     version: state.shell.init.info.version
   };
@@ -41,7 +39,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     init: () => dispatch({
-      type: 'INIT',
+      type: 'SHELL_INIT',
       info: {
         version: 1
       }
@@ -110,25 +108,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "?a75e");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Shell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Shell */ "./src/Shell.jsx");
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-/* harmony import */ var _reducers_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./reducers/init */ "./src/reducers/init.js");
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+/* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
+/* harmony import */ var _reducers_init__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./reducers/init */ "./src/reducers/init.js");
 
 
 
 
 
-const shellReducer = (0,redux__WEBPACK_IMPORTED_MODULE_4__.combineReducers)({
-  init: _reducers_init__WEBPACK_IMPORTED_MODULE_3__.default
+
+const shellReducer = (0,redux__WEBPACK_IMPORTED_MODULE_5__.combineReducers)({
+  init: _reducers_init__WEBPACK_IMPORTED_MODULE_4__.default
 });
 const rootReducer = createReducer({});
-const store = (0,redux__WEBPACK_IMPORTED_MODULE_4__.createStore)(rootReducer);
+const store = (0,redux__WEBPACK_IMPORTED_MODULE_5__.createStore)(rootReducer, (0,redux__WEBPACK_IMPORTED_MODULE_5__.applyMiddleware)(redux_thunk__WEBPACK_IMPORTED_MODULE_3__.default));
 store.asyncReducers = {};
 
-store.addReducer = (key, reducer) => {
-  store.asyncReducers[key] = reducer;
-  console.log('store1!!!', store);
+store.addNamespacedReducer = (key, reducer) => {
+  store.asyncReducers[key] = namespaceReducer(reducer, key);
   store.replaceReducer(createReducer(store.asyncReducers));
-  console.log('store2!!!', store);
+};
+
+store.getNameSpacedStore = key => {
+  const myStore = { ...store
+  };
+
+  myStore.getState = () => store.getState()[key];
+
+  myStore.dispatch = action => populateStoreWithNamespace(key, store.dispatch, action);
+
+  return myStore;
 };
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default().render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Shell__WEBPACK_IMPORTED_MODULE_2__.default, {
@@ -136,10 +145,41 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default().render(react__WEBPACK_IMPORTED_
 }), document.getElementById('app'));
 
 function createReducer(asyncReducers) {
-  return (0,redux__WEBPACK_IMPORTED_MODULE_4__.combineReducers)({
+  return (0,redux__WEBPACK_IMPORTED_MODULE_5__.combineReducers)({
     shell: shellReducer,
     ...asyncReducers
   });
+}
+
+function namespaceReducer(reducerFunction, namespace) {
+  return (state, action) => {
+    const isInitializationCall = state === undefined;
+    if (action.namespace !== namespace && !isInitializationCall) return state;
+    return reducerFunction(state, action);
+  };
+}
+
+function populateStoreWithNamespace(key, originalDispatch, action) {
+  if (typeof action === 'object') {
+    action.namespace = key;
+  }
+
+  if (typeof action === 'function') {
+    const originalThunkAction = action;
+
+    const thunkAction = (dispatch, getState) => {
+      const originalDispatch = dispatch;
+
+      dispatch = action => populateStoreWithNamespace(key, originalDispatch, action);
+
+      originalThunkAction(dispatch, getState);
+    };
+
+    action = thunkAction;
+  } // handle other cases if needed.
+
+
+  return originalDispatch(action);
 }
 
 /***/ }),
@@ -164,9 +204,16 @@ function init(state = {
   }
 }, action) {
   switch (action.type) {
-    case 'INIT':
+    case 'SHELL_INIT':
       return { ...state,
         info: action.info
+      };
+
+    case 'SHELL_UPDATE_VERSION':
+      return { ...state,
+        info: { ...state.info,
+          version: action.version
+        }
       };
 
     default:

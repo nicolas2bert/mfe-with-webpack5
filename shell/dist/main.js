@@ -10,7 +10,7 @@
 /*! runtime requirements: __webpack_require__.e, __webpack_require__, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-redux_es_index_js"), __webpack_require__.e("src_bootstrap_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./bootstrap */ "./src/bootstrap.jsx"));
+Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-redux_es_index_js-node_modules_redux-thunk_es_index_js"), __webpack_require__.e("src_bootstrap_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./bootstrap */ "./src/bootstrap.jsx"));
 
 /***/ }),
 

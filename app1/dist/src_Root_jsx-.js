@@ -59,25 +59,34 @@ class App1 extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
 
 class Content extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
   render() {
-    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       onClick: e => this.props.updateVersion(this.props.appVersion + 1)
-    }, " Increase version ")), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "App1 version: ", this.props.appVersion));
+    }, " Increase App1 version ")), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      onClick: e => this.props.updateVersionThunk(this.props.appVersion + 1)
+    }, " Increase THUNK App1 version ")), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "App1 version: ", this.props.appVersion), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null));
   }
 
 }
 
 function mapStateToProps(state) {
-  console.log('app1 state!!!', state);
   return {
-    appVersion: state.app1.app.info.version
+    appVersion: state.app.info.version
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     updateVersion: version => dispatch({
-      type: 'UPDATE_APP_VERSION',
+      type: 'UPDATE_VERSION',
       version
+    }),
+    updateVersionThunk: version => dispatch(dispatch => {
+      return setTimeout(() => {
+        dispatch({
+          type: 'UPDATE_VERSION',
+          version
+        });
+      }, 3000);
     })
   };
 }
@@ -110,15 +119,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Root extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor(props) {
+    super(props);
+  }
+
   componentWillMount() {
-    this.props.store.addReducer('app1', _reducers__WEBPACK_IMPORTED_MODULE_2__.default); // const getState = this.props.store.getState;
-    // this.props.store.getState = () => getState().app1;
+    this.props.store.addNamespacedReducer('app1', _reducers__WEBPACK_IMPORTED_MODULE_2__.default);
+    this.store = this.props.store.getNameSpacedStore('app1');
   }
 
   render() {
-    console.log('this.props!!!', this.props);
-    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_App1__WEBPACK_IMPORTED_MODULE_1__.default, {
-      store: this.props.store
+    const isReady = !!this.props.store.getState().app1;
+    return isReady && react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_App1__WEBPACK_IMPORTED_MODULE_1__.default, {
+      store: this.store
     }), " ");
   }
 
@@ -153,7 +166,7 @@ function app(state = {
         info: action.info
       };
 
-    case 'UPDATE_APP_VERSION':
+    case 'UPDATE_VERSION':
       return { ...state,
         info: { ...state.info,
           version: action.version
