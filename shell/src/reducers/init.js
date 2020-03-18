@@ -1,5 +1,5 @@
 
-function init(state = { info: { version: '0' }}, action) {
+function init(state = { info: { version: 0 }}, action) {
   switch (action.type) {
     case 'SHELL_INIT':
       return {

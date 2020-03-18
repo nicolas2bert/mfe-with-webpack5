@@ -5,9 +5,11 @@ class Navbar extends React.Component{
     // console.log('this.props.shellVersion!!!', this.props.shellVersion);
     render() {
         return <div>
-            <div> Shell Version: {this.props.version} </div>
-            <div> <button onClick={e => this.props.init()}> Init Shell Version </button> </div>
-        </div>;
+            <button onClick={e => this.props.increaseVersion(this.props.version + 1)}> Increase Shell version </button>
+            <div> Shell version: {this.props.version} </div>
+            <br/>
+            <br/>
+            </div>;
     }
 }
 
@@ -19,9 +21,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch){
     return {
-        init: () => dispatch({
-            type: 'SHELL_INIT',
-            info: { version: 1 },
+        increaseVersion: (version) => dispatch({
+            type: 'SHELL_UPDATE_VERSION',
+            version,
         })
     }
 }
