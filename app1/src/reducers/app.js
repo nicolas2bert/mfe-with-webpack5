@@ -6,10 +6,10 @@ function app(state = { info: { version: 0 }}, action) {
         ...state,
         info: action.info
       }
-    case 'UPDATE_VERSION':
+    case 'INCREMENT_VERSION':
       return {
         ...state,
-        info: { ...state.info, version: action.version }
+        info: { ...state.info, version: state.info.version + 1 }
       }
     default:
       return state

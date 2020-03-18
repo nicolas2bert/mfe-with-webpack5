@@ -5,8 +5,8 @@ class Content extends React.Component{
     render() {
         return <div>
             <br/>
-            <div> <button onClick={e => this.props.updateVersion(this.props.appVersion + 1)}> Increase App2 version </button></div>
-            <div> <button onClick={e => this.props.updateVersionThunk(this.props.appVersion + 1)}> Increase THUNK App2 version </button></div>
+            <div> <button onClick={e => this.props.incrementVersion()}> Increment App2 version </button></div>
+            <div> <button onClick={e => this.props.incrementVersionThunk()}> Increment THUNK App2 version </button></div>
             <div>App2 version: {this.props.appVersion}</div>
             <br/>
             <br/>
@@ -22,15 +22,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-      updateVersion: version => dispatch({
-          type: 'UPDATE_VERSION',
-          version,
+      incrementVersion: () => dispatch({
+          type: 'INCREMENT_VERSION',
       }),
-      updateVersionThunk: version => dispatch((dispatch) => {
+      incrementVersionThunk: () => dispatch((dispatch) => {
         return setTimeout(() => {
             dispatch({
-              type: 'UPDATE_VERSION',
-              version,
+              type: 'INCREMENT_VERSION',
             });
         }, 3000);
       }),

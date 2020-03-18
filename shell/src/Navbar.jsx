@@ -5,7 +5,7 @@ class Navbar extends React.Component{
     // console.log('this.props.shellVersion!!!', this.props.shellVersion);
     render() {
         return <div>
-            <button onClick={e => this.props.increaseVersion(this.props.version + 1)}> Increase Shell version </button>
+            <button onClick={e => this.props.incrementVersion()}> Increment Shell version </button>
             <div> Shell version: {this.props.version} </div>
             <br/>
             <br/>
@@ -21,9 +21,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch){
     return {
-        increaseVersion: (version) => dispatch({
-            type: 'SHELL_UPDATE_VERSION',
-            version,
+        incrementVersion: () => dispatch({
+            type: 'SHELL_INCREMENT_VERSION',
         })
     }
 }
